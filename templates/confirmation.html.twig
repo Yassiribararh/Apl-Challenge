@@ -32,7 +32,8 @@
 
     {# Get Saved Image details #}
     {% if dbImage is not null %}
-        {% set relativePath = '/../' ~ dbImage.path|split('/')|slice(6)|join('/') %}
+        {% set baseURL = app.request.schemeAndHttpHost %}
+        {% set relativePath = baseURL ~ '/' ~ dbImage.path|split('/')|slice(7)|join('/') %}
         {% set azureBlobLink = 'https://aplrecruitment.blob.core.windows.net/apl-recruitment-images/' ~ dbImage.name ~ '.' ~ dbImage.type ~ '?sv=2022-11-02&ss=bf&srt=sco&sp=rwdlactf&se=2024-05-03T23:04:09Z&st=2024-04-26T15:04:09Z&spr=https&sig=3Z/Ppe8xm08ZUkklVlrr80MfhaPO8O5GKjQ6LaEfymY=' %}
 
         <table class="table table-bordered text-nowrap border-bottom mb-0  border">
@@ -66,6 +67,8 @@
             </tbody>
         </table>
     {% endif %}
+
+    <a href="{{ path('app_index') }}" class="btn btn-primary btn-block">Return to Homepage</a>
 
 {% endblock %}
 </body>

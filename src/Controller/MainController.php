@@ -33,7 +33,12 @@ class MainController extends AbstractController
 
         $form = $this->createForm(ImageUploadForm::class);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
+            if (!$form->isValid()) {
+                $error = (string) $form->getErrors(true);
+                $this->addFlash('error', $error);
+                return $this->redirect($this->generateUrl('app_index'));
+            }
 
             $image = $form['image']->getData();
             $offlineMode = $form['offlineMode']->getData();

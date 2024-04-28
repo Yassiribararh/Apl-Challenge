@@ -16,21 +16,36 @@
     <body class="col-lg-12">
     {% block body %}
 
-            <h1>APL Challenge</h1>
+        <h1>APL Challenge</h1>
 
-            {{ form_start(form) }}
+        {{ form_start(form) }}
 
-            <div class="form-group text-start">
-                <label class="tx-medium">Upload Image</label>
-                {{ form_widget(form.image, {'attr': {'placeholder' : 'Please Upload your image here: ', 'class': 'form-control', 'type': 'file', 'accept': 'image/jpeg,image/png'}} ) }}
+        <div class="form-group text-start">
+            <label class="tx-medium">Upload Image</label>
+            {{ form_widget(form.image, {'attr': {'placeholder' : 'Please Upload your image here: ', 'class': 'form-control', 'type': 'file', 'accept': 'image/jpeg,image/png'}} ) }}
+        </div>
+        <div class="form-group text-start">
+            <label class="tx-medium">Offline Mode?</label>
+            {{ form_widget(form.offlineMode, {'attr': {'placeholder' : 'Offline Mode?: ', 'class': 'form-control', 'type': 'ChoiceBox'}} ) }}
+        </div>
+        {{ form_widget(form.submit, {'attr': { 'class': 'btn btn-primary btn-block'}} ) }}
+
+        {{ form_end(form) }}
+
+        <br>
+
+        {# Get Operation success or errors #}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
             </div>
-            <div class="form-group text-start">
-                <label class="tx-medium">Offline Mode?</label>
-                {{ form_widget(form.offlineMode, {'attr': {'placeholder' : 'Offline Mode?: ', 'class': 'form-control', 'type': 'ChoiceBox'}} ) }}
-            </div>
-            {{ form_widget(form.submit, {'attr': { 'class': 'btn btn-primary btn-block'}} ) }}
+        {% endfor %}
 
-            {{ form_end(form) }}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
 
         {% endblock %}
     </body>
