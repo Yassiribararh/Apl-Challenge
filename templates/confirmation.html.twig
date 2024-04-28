@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Upload An Image{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    {% block stylesheets %}
+        <!-- BOOTSTRAP CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    {% endblock %}
+
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body class="col-lg-12">
+{% block body %}
+    <h1>Confirmation Page</h1>
+
+    {# Get Operation success or errors #}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {# Get Saved Image details #}
+    {% if dbImage is not null %}
+        {% set relativePath = '/../' ~ dbImage.path|split('/')|slice(6)|join('/') %}
+        {% set azureBlobLink = 'https://aplrecruitment.blob.core.windows.net/apl-recruitment-images/' ~ dbImage.name ~ '.' ~ dbImage.type ~ '?sv=2022-11-02&ss=bf&srt=sco&sp=rwdlactf&se=2024-05-03T23:04:09Z&st=2024-04-26T15:04:09Z&spr=https&sig=3Z/Ppe8xm08ZUkklVlrr80MfhaPO8O5GKjQ6LaEfymY=' %}
+
+        <table class="table table-bordered text-nowrap border-bottom mb-0  border">
+            <thead>
+              <tr class="report-header">
+                  <th class="wd-lg-10p">Image Name</th>
+                  <th class="wd-lg-10p">Image</th>
+                  <th class="wd-lg-10p">path</th>
+                  <th class="wd-lg-10p">Type</th>
+                  {% if not dbImage.offlineMode %}
+                    <th class="wd-lg-10p">Azure Url</th>
+                  {% endif %}
+                  <th class="wd-lg-10p">Upload Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                  <td class="font-weight-normal">{{ dbImage.name }}</td>
+                  <td class="font-weight-normal">
+                      <a href="{{ relativePath }}" target="_blank" rel="noopener noreferrer">
+                          <img src="{{ relativePath }}" alt="uploaded_image" style="max-width: 100%; height: auto;" />
+                      </a>
+                  </td>
+                  <td class="font-weight-normal">{{ dbImage.path }}</td>
+                  <td class="font-weight-normal">{{ dbImage.type }}</td>
+                  {% if not dbImage.offlineMode %}
+                      <td class="font-weight-normal" style="max-width: 200px; overflow: hidden;"><a href="{{ absolute_url(azureBlobLink) }}" target="_blank">Link</a></td>
+                  {% endif %}
+                  <td class="font-weight-normal">{{ dbImage.createdAt|date('Y-m-d H:i:s') }}</td>
+              </tr>
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}
+</body>
+</html>
