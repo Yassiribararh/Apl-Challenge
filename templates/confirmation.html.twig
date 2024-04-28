@@ -33,7 +33,7 @@
     {# Get Saved Image details #}
     {% if dbImage is not null %}
         {% set baseURL = app.request.schemeAndHttpHost %}
-        {% set relativePath = baseURL ~ '/' ~ dbImage.path|split('/')|slice(7)|join('/') %}
+        {% set imageRelativePath = baseURL ~ '/' ~ dbImage.path|split('/')|slice(-2)|join('/') %}
         {% set azureBlobLink = 'https://aplrecruitment.blob.core.windows.net/apl-recruitment-images/' ~ dbImage.name ~ '.' ~ dbImage.type ~ '?sv=2022-11-02&ss=bf&srt=sco&sp=rwdlactf&se=2024-05-03T23:04:09Z&st=2024-04-26T15:04:09Z&spr=https&sig=3Z/Ppe8xm08ZUkklVlrr80MfhaPO8O5GKjQ6LaEfymY=' %}
 
         <table class="table table-bordered text-nowrap border-bottom mb-0  border">
@@ -53,8 +53,8 @@
               <tr>
                   <td class="font-weight-normal">{{ dbImage.name }}</td>
                   <td class="font-weight-normal">
-                      <a href="{{ relativePath }}" target="_blank" rel="noopener noreferrer">
-                          <img src="{{ relativePath }}" alt="uploaded_image" style="max-width: 100%; height: auto;" />
+                      <a href="{{ imageRelativePath }}" target="_blank" rel="noopener noreferrer">
+                          <img src="{{ imageRelativePath }}" alt="uploaded_image" style="max-width: 100%; height: auto;" />
                       </a>
                   </td>
                   <td class="font-weight-normal">{{ dbImage.path }}</td>
